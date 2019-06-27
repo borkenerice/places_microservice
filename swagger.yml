@@ -1,0 +1,109 @@
+swagger: "2.0"
+info:
+  description: Simple API to perform CRUD operations to the Places database
+  version: "1.0"
+  title: Places API
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /v1
+
+paths:
+  /places:
+    get:
+      operationId: places.get_all_places
+      tags: [Places]
+      summary: Get all Places
+      responses:
+        200:
+          description: List of all Places
+          schema:
+            type: object
+              properties:
+                places:
+                  type: array
+                  items:
+                    $ref: '#/definitions/Place'
+#    post:
+#      operationId: places.create_place
+#      tags: [Places]
+#      summary: Create a new Place
+#      parameters:
+#        - name: place
+#          in: body
+#          schema:
+#            $ref: '#/definitions/Place'
+#      responses:
+#        201:
+#          description: New place created
+
+  /places/{place_id}:
+    get:
+      operationId: places.get_place
+      tags: [Places]
+      summary: Get a Place
+      parameters:
+        - $ref: '#/parameters/place_id'
+      responses:
+        200:
+          description: Definition of a Place
+          schema:
+            type: object
+              properties:
+                places:
+                  type: array
+                  items:
+                    $ref: '#/definitions/Place'
+#    put:
+#      tags: [Place]
+#      operationId: places.put_place
+#      summary: Update a place
+#      parameters:
+#        - $ref: '#/parameters/place_id'
+#        - name: place
+#          in: body
+#          schema:
+#            $ref: '#/definitions/Place'
+#      responses:
+#        200:
+#          description: Place updated
+#    delete:
+#      tags: [Place]
+#      operationId: places.delete_place
+#      summary: Remove a place
+#      parameters:
+#        - $ref: '#/parameters/place_id'
+#      responses:
+#        204:
+#          description: Place was deleted
+#        404:
+#          description: Place does not exist
+
+parameters:
+  place_id:
+    name: place_id
+    description: Place's Unique identifier
+    in: path
+    type: string
+    required: true
+    pattern: "^[0-9]+$"
+
+definitions:
+  Place:
+    type: object
+    required:
+      - name
+    properties:
+      place_id:
+        type: string
+        description: Unique identifier
+        example: "123"
+        readOnly: true
+      name:
+        type: string
+        description: Place's name
+        example: "Westeros"
+        minLength: 1
+        maxLength: 100

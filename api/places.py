@@ -44,7 +44,8 @@ def post_place(place_data):
         new_place = schema.load(place_data, session=db.session).data
         db.session.add(new_place)
         db.session.commit()
-        return make_response(f"Place {place_data.get('name')} successfully created", 201)
+        data = schema.dump(new_place).data
+        return data, 201
     else:
         abort(409, f"Place: {place_data.get('name')} already exists")
 
@@ -53,5 +54,5 @@ def delete_place(place_id):
     place = Place.query.get_or_404(place_id, description=f'Place not found with the id: {place_id}')
     db.session.delete(place)
     db.session.commit()
-    return make_response(f'Place {place_id} successfully deleted', 204)
+    return 204
 

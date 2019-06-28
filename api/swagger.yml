@@ -13,7 +13,7 @@ basePath: /api
 paths:
   /place:
     get:
-      operationId: places.get_all_places
+      operationId: api.places.get_all_places
       tags: [Place]
       summary: Get all Places
       responses:
@@ -27,7 +27,7 @@ paths:
                 items:
                   $ref: '#/definitions/Place'
     post:
-      operationId: places.post_place
+      operationId: api.places.post_place
       tags: [Place]
       summary: Create a new Place
       parameters:
@@ -41,7 +41,7 @@ paths:
 
   /place/{place_id}:
     get:
-      operationId: places.get_place
+      operationId: api.places.get_place
       tags: [Place]
       summary: Get a Place
       parameters:
@@ -60,7 +60,7 @@ paths:
           description: Place does not exist
     put:
       tags: [Place]
-      operationId: places.update_place
+      operationId: api.places.update_place
       summary: Update a place
       parameters:
         - $ref: '#/parameters/place_id'
@@ -71,9 +71,11 @@ paths:
       responses:
         200:
           description: Place updated
+        400:
+          description: Parameters not fulfilled correctly
     delete:
       tags: [Place]
-      operationId: places.delete_place
+      operationId: api.places.delete_place
       summary: Remove a place
       parameters:
         - $ref: '#/parameters/place_id'

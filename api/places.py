@@ -1,6 +1,11 @@
 from flask import make_response, abort
+from sqlalchemy.exc import IntegrityError
+import logging
+
 from config import db
-from models import Place, PlaceSchema
+from api.models import Place, PlaceSchema
+
+logger = logging.getLogger(__name__)
 
 
 def get_all_places():
@@ -23,9 +28,13 @@ def update_place(place_id, place_data):
     updated_place = place_schema.load(place_data, session=db.session).data
     updated_place.place_id = place.place_id
     db.session.merge(updated_place)
-    db.session.commit()
-    data = place_schema.dump(updated_place).data
-    return data
+    try:
+        db.session.commit()
+        data = place_schema.dump(updated_place).data
+        return data
+    except IntegrityError as i:
+        logger.error(f'IntegrityError: {i}')
+        abort(500, f'Place: {place_id} could not be updated')
 
 
 def post_place(place_data):
@@ -44,5 +53,5 @@ def delete_place(place_id):
     place = Place.query.get_or_404(place_id, description=f'Place not found with the id: {place_id}')
     db.session.delete(place)
     db.session.commit()
-    return make_response(f"Place {place_id} successfully deleted", 204)
+    return make_response(f'Place {place_id} successfully deleted', 204)
 

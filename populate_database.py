@@ -1,6 +1,6 @@
 import os
 from config import db
-from models import Place
+from api.models import Place
 
 # Data to initialize database with
 PLACES = [

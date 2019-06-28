@@ -71,8 +71,6 @@ paths:
       responses:
         200:
           description: Place updated
-        400:
-          description: Parameters not fulfilled correctly
     delete:
       tags: [Place]
       operationId: api.places.delete_place
@@ -102,7 +100,7 @@ definitions:
     properties:
       name:
         type: string
-        description: Place's name
+        description: Place's unique name
         example: "Westeros"
         minLength: 1
         maxLength: 100

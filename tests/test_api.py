@@ -1,48 +1,98 @@
-import os
-
-import unittest
-from config import db, app, connexion_app
+import pytest
+from api import create_app, db
 from api.models import Place
 
 
-class PlacesTests(unittest.TestCase):
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    connexion_app.add_api('api/swagger.yml')
-    app.config['TESTING'] = True
-    client = app.test_client()
-    # database creation and initialization
-    if os.path.exists("test.db"):
-        os.remove("test.db")
-    if os.name == 'nt':
-        sqlite_url = "sqlite:///" + os.path.join(basedir, "test.db")
-    else:
-        sqlite_url = "sqlite:////" + os.path.join(basedir, "test.db")
-    app.config["SQLALCHEMY_DATABASE_URI"] = sqlite_url
+@pytest.fixture(scope='module')
+def test_client():
+    app = create_app()
+
+    testing_client = app.test_client()
+
+    context = app.app_context()
+    context.push()
+
+    yield testing_client
+
+    context.pop()
+
+
+@pytest.fixture(scope='module')
+def init_database():
+    # Create the database and the database table
     db.create_all()
-    # Data to initialize database
-    PLACES = [
-        {
-            "name": "Westeros",
-        },
-        {
-            "name": "Kingslanding"
-        },
-        {
-            "name": "Winterfell"
-        },
-    ]
-    for place in PLACES:
-        p = Place(name=place.get("name"))
-        db.session.add(p)
+
+    # Insert user data
+    place = Place(name='Westeros Test')
+    place2 = Place(name='Kingslanding Test')
+    db.session.add(place)
+    db.session.add(place2)
+
+    # Commit the changes for the users
     db.session.commit()
 
-    def test_get_place(self):
-        response = self.client.get('api/place')
-        assert response.status_code == 200
+    yield db
 
-    def test_return_place(self):
-        response = self.client.get('api/place/1')
-        assert response.status_code == 200
+    db.drop_all()
+
+
+def test_read_places_response(test_client, init_database):
+    response = test_client.get('/api/place')
+    assert response.status_code == 200
+
+
+def test_read_place_response(test_client, init_database):
+    response = test_client.get('/api/place/1')
+    assert response.status_code == 200
+
+
+def test_read_place_do_not_exists(test_client, init_database):
+    response = test_client.get('/api/place/3')
+    assert response.status_code == 404
+
+
+def test_create_place(test_client, init_database):
+    place = {
+        'name': 'Place Create Test'
+    }
+    response = test_client.post('/api/place', json=place)
+    assert response.status_code == 201
+
+
+def test_create_place_same_name_error(test_client, init_database):
+    place = {
+        'name': 'Place Create Test'
+    }
+    response = test_client.post('/api/place', json=place)
+    assert response.status_code == 400
+
+
+def test_update_place(test_client, init_database):
+    place = {
+        'name': 'Place Update Test',
+        'place_id': '1'
+    }
+    response = test_client.post('/api/place', json=place)
+    assert response.status_code == 201
+
+
+def test_update_place_same_name_error(test_client, init_database):
+    place = {
+        'name': 'Place Update Test',
+        'place_id': '1'
+    }
+    response = test_client.post('/api/place', json=place)
+    assert response.status_code == 400
+
+
+def test_delete_place(test_client, init_database):
+    response = test_client.delete('/api/place/1')
+    assert response.status_code == 200
+
+
+def test_delete_place_does_not_exists_error(test_client, init_database):
+    response = test_client.delete('/api/place/80')
+    assert response.status_code == 404
 
 
 

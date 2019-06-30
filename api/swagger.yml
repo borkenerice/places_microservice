@@ -38,6 +38,8 @@ paths:
       responses:
         201:
           description: New place created
+        400:
+          description: Error creating place
 
   /place/{place_id}:
     get:
@@ -69,8 +71,10 @@ paths:
           schema:
             $ref: '#/definitions/Place'
       responses:
-        200:
+        201:
           description: Place updated
+        400:
+          description: Error updating place
     delete:
       tags: [Place]
       operationId: api.places.delete_place
@@ -78,7 +82,7 @@ paths:
       parameters:
         - $ref: '#/parameters/place_id'
       responses:
-        204:
+        200:
           description: Place was deleted
         404:
           description: Place does not exists

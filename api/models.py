@@ -1,4 +1,4 @@
-from config import db, ma
+from api import db, ma
 from sqlalchemy.orm import validates
 
 

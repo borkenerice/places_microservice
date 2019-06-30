@@ -1,20 +1,20 @@
 from flask import abort
 import logging
 
-from config import db
+from api import db
 from api.models import Place, PlaceSchema
 
 logger = logging.getLogger(__name__)
 
 
-def get_all_places():
+def read_all_places():
     places = Place.query.order_by(Place.name).all()
     place_schema = PlaceSchema(many=True)
     data = place_schema.dump(places).data
     return data
 
 
-def get_place(place_id):
+def read_place(place_id):
     place = Place.query.get_or_404(place_id, description=f'Place not found with the id: {place_id}')
     place_schema = PlaceSchema()
     data = place_schema.dump(place).data
@@ -35,7 +35,7 @@ def update_place(place_id, place_data):
         abort(400, f'Place: {place_id} could not be updated: {v}')
 
 
-def post_place(place_data):
+def create_place(place_data):
     try:
         schema = PlaceSchema()
         new_place = schema.load(place_data, session=db.session).data

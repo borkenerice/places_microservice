@@ -13,7 +13,7 @@ basePath: /api
 paths:
   /place:
     get:
-      operationId: api.places.get_all_places
+      operationId: api.places.read_all_places
       tags: [Place]
       summary: Get all Places
       responses:
@@ -27,7 +27,7 @@ paths:
                 items:
                   $ref: '#/definitions/Place'
     post:
-      operationId: api.places.post_place
+      operationId: api.places.create_place
       tags: [Place]
       summary: Create a new Place
       parameters:
@@ -41,7 +41,7 @@ paths:
 
   /place/{place_id}:
     get:
-      operationId: api.places.get_place
+      operationId: api.places.read_place
       tags: [Place]
       summary: Get a Place
       parameters:

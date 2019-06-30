@@ -1,10 +1,7 @@
 from flask import abort
-import logging
 
 from api import db
 from api.models import Place, PlaceSchema
-
-logger = logging.getLogger(__name__)
 
 
 def read_all_places():

@@ -15,3 +15,6 @@ SQLALCHEMY_DATABASE_URI = sqlite_url
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 SWAGGER_DIR = os.path.join(BASE_DIR, 'api', 'swagger.yml')
+
+
+TESTING = True

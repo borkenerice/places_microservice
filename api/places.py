@@ -1,4 +1,5 @@
 from flask import abort
+from sqlalchemy.exc import IntegrityError
 
 from api import db
 from api.models import Place, PlaceSchema
@@ -6,6 +7,8 @@ from api.models import Place, PlaceSchema
 
 def read_all_places():
     places = Place.query.order_by(Place.name).all()
+    if not places:
+        return 204
     place_schema = PlaceSchema(many=True)
     data = place_schema.dump(places).data
     return data
@@ -28,8 +31,8 @@ def update_place(place_id, place_data):
         db.session.commit()
         data = place_schema.dump(updated_place).data
         return data
-    except ValueError as v:
-        abort(400, f'Place: {place_id} could not be updated: {v}')
+    except IntegrityError:
+        abort(400, f'Place: {place_id} could not be updated')
 
 
 def create_place(place_data):
@@ -39,9 +42,9 @@ def create_place(place_data):
         db.session.add(new_place)
         db.session.commit()
         data = schema.dump(new_place).data
-        return data, 201
-    except ValueError as v:
-        abort(400, f'Place could not be created: {v}')
+        return data
+    except IntegrityError:
+        abort(400, f'Place could not be created')
 
 
 def delete_place(place_id):

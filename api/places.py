@@ -5,14 +5,14 @@ from api import db
 from api.models import Place, PlaceSchema
 
 
-def read_all_places():
+def find_all_places():
     places = Place.query.order_by(Place.name).all()
     place_schema = PlaceSchema(many=True)
     data = place_schema.dump(places).data
     return data
 
 
-def read_place(place_id):
+def find_place_by_id(place_id):
     place = Place.query.get_or_404(place_id, description=f'Place not found with the id: {place_id}')
     place_schema = PlaceSchema()
     data = place_schema.dump(place).data

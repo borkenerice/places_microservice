@@ -17,15 +17,15 @@ PLACES = [
 ]
 
 
-def create_database(database_name):
+def create_database():
     # Delete database file if it exists currently
-    if os.path.exists(os.path.join(config.BASE_DIR, database_name)):
-        os.remove(os.path.join(config.BASE_DIR, database_name))
+    if os.path.exists(os.path.join(config.BASE_DIR, 'places.db')):
+        os.remove(os.path.join(config.BASE_DIR, 'places.db'))
 
     if os.name == 'nt':
-        sqlite_url = "sqlite:///" + os.path.join(config.BASE_DIR, database_name)
+        sqlite_url = "sqlite:///" + os.path.join(config.BASE_DIR, 'places.db')
     else:
-        sqlite_url = "sqlite:////" + os.path.join(config.BASE_DIR, database_name)
+        sqlite_url = "sqlite:////" + os.path.join(config.BASE_DIR, 'places.db')
 
     # Create the database
     app = create_app()
@@ -39,3 +39,5 @@ def create_database(database_name):
         db.session.commit()
 
 
+if __name__ == '__main__':
+    create_database()

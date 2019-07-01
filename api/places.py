@@ -7,8 +7,6 @@ from api.models import Place, PlaceSchema
 
 def read_all_places():
     places = Place.query.order_by(Place.name).all()
-    if not places:
-        return 204
     place_schema = PlaceSchema(many=True)
     data = place_schema.dump(places).data
     return data
@@ -30,9 +28,10 @@ def update_place(place_id, place_data):
         db.session.merge(updated_place)
         db.session.commit()
         data = place_schema.dump(updated_place).data
-        return data
-    except IntegrityError:
-        abort(400, f'Place: {place_id} could not be updated')
+        return data, 201
+    except IntegrityError as i:
+        db.session.rollback()
+        abort(400, f'Place: {place_id} could not be updated: {i.orig}')
 
 
 def create_place(place_data):
@@ -42,14 +41,15 @@ def create_place(place_data):
         db.session.add(new_place)
         db.session.commit()
         data = schema.dump(new_place).data
-        return data
-    except IntegrityError:
-        abort(400, f'Place could not be created')
+        return data, 201
+    except IntegrityError as i:
+        db.session.rollback()
+        abort(400, f'Place could not be created: {i.orig}')
 
 
 def delete_place(place_id):
     place = Place.query.get_or_404(place_id, description=f'Place not found with the id: {place_id}')
     db.session.delete(place)
     db.session.commit()
-    return 204
+    return
 

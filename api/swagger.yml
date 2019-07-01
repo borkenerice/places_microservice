@@ -13,7 +13,7 @@ basePath: /api
 paths:
   /place:
     get:
-      operationId: api.places.read_all_places
+      operationId: api.places.find_all_places
       tags: [Place]
       summary: Get all Places
       responses:
@@ -45,14 +45,14 @@ paths:
 
   /place/{place_id}:
     get:
-      operationId: api.places.read_place
+      operationId: api.places.find_place_by_id
       tags: [Place]
-      summary: Get a Place
+      summary: Find a place by its Id
       parameters:
         - $ref: '#/parameters/place_id'
       responses:
         200:
-          description: Definition of a Place identified by its id
+          description: Definition of a Place
           schema:
             type: object
             properties:
@@ -65,7 +65,7 @@ paths:
     put:
       tags: [Place]
       operationId: api.places.update_place
-      summary: Update a place
+      summary: Update a place identified by its id
       parameters:
         - $ref: '#/parameters/place_id'
         - name: place_data
@@ -80,7 +80,7 @@ paths:
     delete:
       tags: [Place]
       operationId: api.places.delete_place
-      summary: Remove a place
+      summary: Remove a place identified by its id
       parameters:
         - $ref: '#/parameters/place_id'
       responses:

@@ -21,15 +21,8 @@ def create_database():
     # Delete database file if it exists currently
     if os.path.exists(os.path.join(config.BASE_DIR, 'places.db')):
         os.remove(os.path.join(config.BASE_DIR, 'places.db'))
-
-    if os.name == 'nt':
-        sqlite_url = "sqlite:///" + os.path.join(config.BASE_DIR, 'places.db')
-    else:
-        sqlite_url = "sqlite:////" + os.path.join(config.BASE_DIR, 'places.db')
-
     # Create the database
     app = create_app()
-    app.config['SQLALCHEMY_DATABASE_URI'] = sqlite_url
     with app.app_context():
         db.create_all()
         # iterate over the PEOPLE structure and populate the database

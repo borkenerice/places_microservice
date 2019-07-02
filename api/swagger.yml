@@ -26,8 +26,6 @@ paths:
                 type: object
                 items:
                   $ref: '#/definitions/Place'
-        204:
-          description: No places found
     post:
       operationId: api.places.create_place
       tags: [Place]

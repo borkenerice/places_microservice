@@ -75,7 +75,7 @@ def test_create_place(client, init_database):
         'name': 'Place Create Test'
     }
     response = client.post('/api/place', json=place)
-    assert response.status_code == 201
+    assert response.status_code == 200
 
 
 def test_create_place_same_name_error(client, init_database):
@@ -103,7 +103,7 @@ def test_update_place(client, init_database):
         'name': 'Place Update Test',
     }
     response = client.put('/api/place/1', json=place)
-    assert response.status_code == 201
+    assert response.status_code == 200
 
 
 def test_update_place_same_name_error(client, init_database):

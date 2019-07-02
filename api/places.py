@@ -28,7 +28,7 @@ def update_place(place_id, place_data):
         db.session.merge(updated_place)
         db.session.commit()
         data = place_schema.dump(updated_place).data
-        return data, 201
+        return data, 200
     except IntegrityError as i:
         db.session.rollback()
         abort(400, f'Place: {place_id} could not be updated: {i.orig}')
@@ -41,7 +41,7 @@ def create_place(place_data):
         db.session.add(new_place)
         db.session.commit()
         data = schema.dump(new_place).data
-        return data, 201
+        return data, 200
     except IntegrityError as i:
         db.session.rollback()
         abort(400, f'Place could not be created: {i.orig}')

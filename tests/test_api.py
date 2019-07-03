@@ -21,6 +21,7 @@ def init_database():
     fixture that initializes the db to be used in the tests
     :return: db
     """
+    db.drop_all()
     db.create_all()
     place = Place(name='Westeros Test')
     place2 = Place(name='Kingslanding Test')
@@ -31,7 +32,7 @@ def init_database():
     db.drop_all()
 
 
-def test_read_places_response_status(client, init_database):
+def test_find_all_places(client, init_database):
     """
     Check correct response code for a get request to the place endpoint
     :param client: fixture
@@ -42,7 +43,7 @@ def test_read_places_response_status(client, init_database):
     assert response.status_code == 200
 
 
-def test_read_place_response(client, init_database):
+def test_find_place_by_id(client, init_database):
     """
     Check correct response code for a get request for a unique place
     :param client: fixture
@@ -53,7 +54,7 @@ def test_read_place_response(client, init_database):
     assert response.status_code == 200
 
 
-def test_read_place_do_not_exists(client, init_database):
+def test_find_place_by_id_do_not_exists(client, init_database):
     """
     Check correct response code for a get request for a unique place if it does not exists
     :param client: fixture
@@ -78,7 +79,7 @@ def test_create_place(client, init_database):
     assert response.status_code == 201
 
 
-def test_create_place_same_name_error(client, init_database):
+def test_create_place_same_name(client, init_database):
     """
     Check correct response code for a post request to create a place if it has the same name as one that already exists
     :param client: fixture
@@ -106,7 +107,7 @@ def test_update_place(client, init_database):
     assert response.status_code == 200
 
 
-def test_update_place_same_name_error(client, init_database):
+def test_update_place_same_name(client, init_database):
     """
     Check correct response code for a put request to update a place if it has the same name as one that already exists
     :param client: fixture
@@ -131,7 +132,7 @@ def test_delete_place(client, init_database):
     assert response.status_code == 200
 
 
-def test_delete_place_does_not_exists_error(client, init_database):
+def test_delete_place_does_not_exists(client, init_database):
     """
     Check correct response code for a delete request to delete a place that do not exists
     :param client: fixture

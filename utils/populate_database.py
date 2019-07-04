@@ -24,6 +24,7 @@ def create_database():
     # Create the database
     app = create_app()
     with app.app_context():
+        db.drop_all()
         db.create_all()
         # iterate over the PEOPLE structure and populate the database
         for place in PLACES:

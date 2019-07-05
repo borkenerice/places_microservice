@@ -1,0 +1,110 @@
+swagger: "2.0"
+info:
+  description: Simple API to perform CRUD operations to the Places database
+  version: "1.0"
+  title: Places API
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /api
+
+paths:
+  /place:
+    get:
+      operationId: api.places.find_all_places
+      tags: [Place]
+      summary: Get all Places
+      responses:
+        200:
+          description: List of all Places
+          schema:
+            type: object
+            properties:
+              places:
+                type: object
+                items:
+                  $ref: '#/definitions/Place'
+    post:
+      operationId: api.places.create_place
+      tags: [Place]
+      summary: Create a new Place
+      parameters:
+        - name: place_data
+          in: body
+          schema:
+            $ref: '#/definitions/Place'
+      responses:
+        201:
+          description: New place created
+        400:
+          description: Error creating place
+
+  /place/{place_id}:
+    get:
+      operationId: api.places.find_place_by_id
+      tags: [Place]
+      summary: Find a place by its Id
+      parameters:
+        - $ref: '#/parameters/place_id'
+      responses:
+        200:
+          description: Definition of a Place
+          schema:
+            type: object
+            properties:
+              places:
+                type: object
+                items:
+                  $ref: '#/definitions/Place'
+        404:
+          description: Place does not exist
+    put:
+      tags: [Place]
+      operationId: api.places.update_place
+      summary: Update a place identified by its id
+      parameters:
+        - $ref: '#/parameters/place_id'
+        - name: place_data
+          in: body
+          schema:
+            $ref: '#/definitions/Place'
+      responses:
+        201:
+          description: Place updated
+        400:
+          description: Error updating place
+    delete:
+      tags: [Place]
+      operationId: api.places.delete_place
+      summary: Remove a place identified by its id
+      parameters:
+        - $ref: '#/parameters/place_id'
+      responses:
+        200:
+          description: Place was deleted
+        404:
+          description: Place does not exists
+
+parameters:
+  place_id:
+    name: place_id
+    description: Place's Unique identifier
+    in: path
+    type: string
+    required: true
+    pattern: "^[0-9]+$"
+
+definitions:
+  Place:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        description: Place's unique name
+        example: "Westeros"
+        minLength: 1
+        maxLength: 100

@@ -30,7 +30,7 @@ def create_database():
     with app.app_context():
         db.drop_all()
         db.create_all()
-        # iterate over the PEOPLE structure and populate the database
+        # iterate over the PLACES structure and populate the database
         for place in PLACES:
             p = Place(name=place.get("name"))
             db.session.add(p)

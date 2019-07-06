@@ -7,28 +7,19 @@ if os.path.abspath(os.curdir) not in sys.path:
 
 import config
 from api import db, create_app
-from api.models import Character
+from api.models import Place
 
 
 # Data to initialize database with
-CHARACTERS = [
+PLACES = [
     {
-        "name": "Jon",
-        "place_id": "1",
-        "king": False,
-        "alive": False
+        "name": "Westeros",
     },
     {
-        "name": "Sansa",
-        "place_id": "1",
-        "king": True,
-        "alive": True
+        "name": "Kingslanding"
     },
     {
-        "name": "Doggie",
-        "place_id": "2",
-        "king": False,
-        "alive": False
+        "name": "Winterfell"
     },
 ]
 
@@ -39,10 +30,9 @@ def create_database():
     with app.app_context():
         db.drop_all()
         db.create_all()
-        # iterate over the PEOPLE structure and populate the database
-        for character in CHARACTERS:
-            p = Character(name=character.get("name"), place_id=character.get("place_id"), king=character.get("king"),
-                          alive=character.get("alive"))
+        # iterate over the PLACES structure and populate the database
+        for place in PLACES:
+            p = Place(name=place.get("name"))
             db.session.add(p)
         db.session.commit()
 

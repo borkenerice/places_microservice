@@ -1,7 +1,7 @@
 import os
 
 DEBUG = True
-TESTING = True
+TESTING = False
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 

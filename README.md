@@ -22,3 +22,8 @@ After these steps you should be able to access a swagger ui through the url http
 The database is empty, but you can fill it with some examples running:
 
 `docker-compose exec places_api python utils/populate_database.py`
+
+
+## Tests
+
+Used pytest and fixtures to test the application.

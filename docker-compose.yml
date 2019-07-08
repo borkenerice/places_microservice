@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  places_api:
+    restart: always
+    build: .
+    ports:
+      - "8082:8082"
+    command: flask run --host=0.0.0.0 --port 8082
+    depends_on:
+      - postgres_places
+  postgres_places:
+    restart: always
+    build: ./postgresql
+    volumes:
+      - /var/lib/postgresql_places
+    expose:
+      - "5432"
